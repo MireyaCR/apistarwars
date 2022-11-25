@@ -38,33 +38,40 @@ def sitemap():
 
 @app.route('/user', methods=['GET'])
 def handle_hello():
-
     response_body = {
         "msg": "Hello, this is your GET /user response "
     }
-
     return jsonify(response_body), 200
-@app.route('/people', methods=['GET', 'POST'])
-def handle_people():
 
-    if request.method== 'POST':
-        body= request.get_json()
-        character= People(
-            name=body['name'],
-            height=body['height'],
-            mass=body['mass']
-        )
-        db.session.add(character)
-        db.seesion.commit()
-        response_body={
-        "msg": "Character added correctly¿"
-        }
-    return jsonify(response_body), 200
-    if request.method== 'GET':
+@app.route('/people', methods=['GET'])
+def get_all_people():
+    if request.method == 'GET':
         all_people=People.query.all()
         all_people=list(map(lambda x: x.serialize(),all_people))
-        response_body=all_people
-        return jsonify(response_body),200
+        return jsonify(all_people),200
+
+@app.route('/people/<int:people_id>', methods=['GET'])
+def get_single_person(people_id):
+    if request.method == 'GET':
+        poeple1 = People.query.get(people_id)
+        return jsonify(people1.serialize()), 200
+    return "Invalid Method", 404
+
+
+    # if request.method == 'POST':
+    #     body= request.get_json()
+    #     character= People(
+    #         name=body['name'],
+    #         height=body['height'],
+    #         mass=body['mass']
+    #     )
+    #     db.session.add(character)
+    #     db.seesion.commit()
+    #     response_body={
+    #     "msg": "Character added correctly¿"
+    #     }
+    #     return jsonify(response_body), 200
+    
     
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
