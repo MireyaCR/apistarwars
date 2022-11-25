@@ -1,14 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-# import os
-# import sys
-# from sqlalchemy import Column, ForeignKey, Integer, String
-# from sqlalchemy.ext.declarative import declarative_base
-# from sqlalchemy.orm import relationship
-# from sqlalchemy import create_engine
-# from eralchemy2 import render_er
 
 db = SQLAlchemy()
-# Base = declarative_base()
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -16,7 +8,6 @@ class User(db.Model):
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     user_name = db.Column(db.String(250),primary_key=True)
-
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -27,18 +18,9 @@ class User(db.Model):
             "email": self.email,
             # do not serialize the password, its a security breach
         }
-#    
 
-# class Favorites(Base):
-#     __tablename__ = 'favorites'
-#     id = Column(Integer, primary_key=True)
-#     planets_id = Column(Integer, ForeignKey('planets.id'))
-#     people_id = Column(Integer, ForeignKey('people.id'))
-#     user_id = Column(Integer, ForeignKey('user.id'))
-#     favorites = relationship(User)
 
-class People(db.Model):
-   
+class People(db.Model):   
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250),unique=True, nullable=False)
     height = db.Column(db.Integer)
@@ -53,6 +35,10 @@ class People(db.Model):
     name = db.Column(db.String(250))
     homeworld = db.Column(db.String(250))
     url = db.Column(db.String(250))
+
+    def __repr__(self):
+        return '<People %r>' % self.id
+
     def serialize(self):
         return{
             "id": self.id,
@@ -71,24 +57,47 @@ class People(db.Model):
          }
 
 
-# class Planets(Base):
-#     __tablename__ = 'planets'
+class Planets(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name_planet = db.Column(db.String(250))
+    diameter = db.Column(db.Integer)
+    rotation_period = db.Column(db.Integer)
+    orbital_period = db.Column(db.Integer)
+    gravity = db.Column(db.Integer)
+    population = db.Column(db.Integer)
+    climate = db.Column(db.String(250))
+    terrain = db.Column(db.String(250))
+    surface_water = db.Column(db.String(250))
+    created = db.Column(db.String(250))
+    edited = db.Column(db.String(250))
+    url = db.Column(db.String(250))
+
+    def __repr__(self):
+        return '<Planets %r>' % self.id
+        
+    def serialize(self):
+        return{
+            "id":self.id,
+            "name_planet":self.name_planet,
+            "diameter":self.diameter,
+            "rotation_period":self.rotation_period,
+            "orbital_period":self.orbital_period,
+            "gravity":self.gravity,
+            "population":self.population,
+            "climate":self.climate,
+            "terrain":self.terrain,
+            "surface_water":self.surface_water,
+            "created":self.created,
+            "edited":self.edited,
+            "url":self.url, 
+        }
+
+
+# class Favorites(Base):
+#     __tablename__ = 'favorites'
 #     id = Column(Integer, primary_key=True)
-#     name_planet = Column(String(250))
-#     diameter = Column(String(250))
-#     rotation_period = Column(String(250))
-#     orbital_period = Column(String(250))
-#     gravity = Column(String(250))
-#     population = Column(String(250))
-#     climate = Column(String(250))
-#     terrain = Column(String(250))
-#     surface_water = Column(String(250))
-#     created = Column(String(250))
-#     edited = Column(String(250))
-#     url = Column(String(250))
-#     planets = relationship(Favorites)
-
-   
-
-# ## Draw from SQLAlchemy base
-# render_er(Base, 'diagram.png')
+#     planets_id = Column(Integer, ForeignKey('planets.id'))
+#     people_id = Column(Integer, ForeignKey('people.id'))
+#     user_id = Column(Integer, ForeignKey('user.id'))
+#     favorites = relationship(User)
+# 
