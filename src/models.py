@@ -59,8 +59,6 @@ class Planets(db.Model):
     climate = db.Column(db.String(250))
     terrain = db.Column(db.String(250))
     surface_water = db.Column(db.String(250))
-    created = db.Column(db.String(250))
-    edited = db.Column(db.String(250))
     url = db.Column(db.String(250))
 
     def __repr__(self):
@@ -78,8 +76,6 @@ class Planets(db.Model):
             "climate":self.climate,
             "terrain":self.terrain,
             "surface_water":self.surface_water,
-            "created":self.created,
-            "edited":self.edited,
             "url":self.url, 
         }
 
@@ -90,5 +86,5 @@ class Planets(db.Model):
 #     planets_id = Column(Integer, ForeignKey('planets.id'))
 #     people_id = Column(Integer, ForeignKey('people.id'))
 #     user_id = Column(Integer, ForeignKey('user.id'))
-#     favorites = relationship(User)
+#   
 # 
