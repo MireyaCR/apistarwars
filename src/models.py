@@ -27,12 +27,7 @@ class People(db.Model):
     mass = db.Column(db.Integer)
     hair_color = db.Column(db.String(250))
     skin_color = db.Column(db.String(250))
-    population = db.Column(db.Integer)
     birth_year = db.Column(db.String(250))
-    gender = db.Column(db.String(250))
-    created = db.Column(db.String(250))
-    edited = db.Column(db.String(250))
-    name = db.Column(db.String(250))
     homeworld = db.Column(db.String(250))
     url = db.Column(db.String(250))
 
@@ -47,11 +42,7 @@ class People(db.Model):
             "mass": self.mass,
             "hair_color": self.hair_color,
             "skin_color":self.skin_color,
-            "population" :self.population,
             "birth_year": self.birth_year,
-            "gender":self.gender,
-            "created":self.created,
-            "edited" : self.edited,
             "homeworld":self.homeworld,
             "url":self.url,
          }
@@ -74,7 +65,7 @@ class Planets(db.Model):
 
     def __repr__(self):
         return '<Planets %r>' % self.id
-        
+
     def serialize(self):
         return{
             "id":self.id,

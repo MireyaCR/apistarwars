@@ -43,17 +43,36 @@ def handle_hello():
     }
     return jsonify(response_body), 200
 
-@app.route('/people', methods=['GET'])
+@app.route('/people', methods=['GET','POST'])
 def get_all_people():
     if request.method == 'GET':
         all_people=People.query.all()
         all_people=list(map(lambda x: x.serialize(),all_people))
         return jsonify(all_people),200
 
+    if request.method == 'POST':
+        body= request.get_json()
+        character= People(
+            name=body['name'],
+            height=body['height'],
+            mass=body['mass'],
+            hair_color=body['hair_color'],
+            skin_color =body['skin_color'],
+            birth_year=body['birth_year'],
+            homeworld=body['homeworld'],
+            url=body['homeworld'],
+        )
+        db.session.add(character)
+        db.session.commit()
+        response_body={
+        "msg": "Character added correctly¿"
+        }
+        return jsonify(response_body), 200
+
 @app.route('/people/<int:people_id>', methods=['GET'])
 def get_single_person(people_id):
     if request.method == 'GET':
-        poeple1 = People.query.get(people_id)
+        poeple1=People.query.get(people_id)
         return jsonify(people1.serialize()), 200
     return "Invalid Method", 404
 
@@ -72,19 +91,7 @@ def get_single_planet(planets_id):
     return "Invalid Method", 404
 
 
-    # if request.method == 'POST':
-    #     body= request.get_json()
-    #     character= People(
-    #         name=body['name'],
-    #         height=body['height'],
-    #         mass=body['mass']
-    #     )
-    #     db.session.add(character)
-    #     db.seesion.commit()
-    #     response_body={
-    #     "msg": "Character added correctly¿"
-    #     }
-    #     return jsonify(response_body), 200
+    
     
     
 # this only runs if `$ python src/app.py` is executed
