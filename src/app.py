@@ -90,6 +90,15 @@ def get_single_planet(planets_id):
         return jsonify(planets1.serialize()), 200
     return "Invalid Method", 404
 
+@app.route('/people/<int:people_id>', methods=['DELETE'])
+def delete_person(people_id):
+    person1=User.query.get(peope_id)
+    if person1 is None:
+        raise APIException("User not found",status_code=404)
+    db.session.delete_person(people_id)
+    db.session.commit()
+    return jsonify(), 200
+    return "Invalid Method", 404
 
     
     
