@@ -38,11 +38,10 @@ def sitemap():
 
 @app.route('/user', methods=['GET'])
 def handle_hello():
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
-    return jsonify(response_body), 200
-
+    all_user=User.query.all()
+    all_user=list(map(lambda x: x.serialize(),all_user))
+    return jsonify(all_user),200
+    
 @app.route('/people', methods=['GET','POST'])
 def get_all_people():
     if request.method == 'GET':
@@ -99,8 +98,7 @@ def delete_person(people_id):
     db.session.commit()
     return jsonify(), 200
     return "Invalid Method", 404
-
-    
+   
     
     
 # this only runs if `$ python src/app.py` is executed
