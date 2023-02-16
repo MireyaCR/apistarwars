@@ -35,12 +35,6 @@ def handle_invalid_usage(error):
 @app.route('/')
 def sitemap():
     return generate_sitemap(app)
-
-@app.route('/user', methods=['GET'])
-def handle_hello():
-    all_user=User.query.all()
-    all_user=list(map(lambda x: x.serialize(),all_user))
-    return jsonify(all_user),200
     
 @app.route('/people', methods=['GET','POST'])
 def get_all_people():
@@ -107,15 +101,43 @@ def get_all_planets():
 def get_single_planet(planets_id):
     if request.method == 'GET':
         planets1 = Planets.query.get(planets_id)
-        return jsonify(planets1.serialize()), 200
+        return jsonify(planets1.serialize()), 200    
     return "Invalid Method", 404
+
+
+@app.route('/user', methods=['GET'])
+def handle_hello():
+    all_user=User.query.all()
+    all_user=list(map(lambda x: x.serialize(),all_user))
+    return jsonify(all_user),200
+
+@app.route('/user/<int:user_id>/favorites', methods=['GET'])
+def get_favorites(user_id):
+    print (user_id)
+    if request.method =='GET':
+        favorites=Favorites.query.filter_by(user_id=user_id).all()
+        result=[]
+        for favorites in favorites:
+            result.append(favorites.serialize())
+        return jsonify(result)
+   
 
 @app.route('/people/<int:people_id>', methods=['DELETE'])
 def delete_person(people_id):
-    person1=User.query.get(peope_id)
+    person1=User.query.get(people_id)
     if person1 is None:
         raise APIException("User not found",status_code=404)
     db.session.delete_person(people_id)
+    db.session.commit()
+    return jsonify(), 200
+    return "Invalid Method", 404
+
+@app.route('/planets/<int:planets_id>', methods=['DELETE'])
+def delete_planets(planets_id):
+    person1=User.query.get(planets_id)
+    if person1 is None:
+        raise APIException("User not found",status_code=404)
+    db.session.delete_planets(planets_id)
     db.session.commit()
     return jsonify(), 200
     return "Invalid Method", 404
