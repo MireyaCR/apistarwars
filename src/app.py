@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User,People,Planets
+from models import db, User,People,Planets,Favorites
 #from models import Person
 
 app = Flask(__name__)
@@ -64,23 +64,44 @@ def get_all_people():
         db.session.add(character)
         db.session.commit()
         response_body={
-        "msg": "Character added correctly¿"
+        "msg": "Character added correctly!"
         }
         return jsonify(response_body), 200
 
 @app.route('/people/<int:people_id>', methods=['GET'])
 def get_single_person(people_id):
     if request.method == 'GET':
-        poeple1=People.query.get(people_id)
+        people1=People.query.get(people_id)
         return jsonify(people1.serialize()), 200
     return "Invalid Method", 404
 
-@app.route('/planets', methods=['GET'])
+@app.route('/planets', methods=['GET','POST'])
 def get_all_planets():
     if request.method == 'GET':
         all_planets=Planets.query.all()
         all_planets=list(map(lambda x: x.serialize(),all_planets))
         return jsonify(all_planets),200
+
+    if request.method == 'POST':
+        body= request.get_json()
+        planet= Planets(
+            name_planet=body['name_planet'],
+            diameter=body['diameter'],
+            rotation_period=body['rotation_period'],
+            orbital_period=body['orbital_period'],
+            gravity=body['gravity'],
+            population=body['population'],
+            climate=body['climate'],
+            terrain=body['terrain'],
+            surface_water=body['surface_water'],
+            url=body['url'], 
+        )
+        db.session.add(planet)
+        db.session.commit()
+        response_body={
+        "msg": "Planet added correctly!"
+        }
+        return jsonify(response_body), 200
 
 @app.route('/planets/<int:planets_id>', methods=['GET'])
 def get_single_planet(planets_id):

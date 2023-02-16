@@ -80,11 +80,12 @@ class Planets(db.Model):
         }
 
 
-# class Favorites(Base):
-#     __tablename__ = 'favorites'
-#     id = Column(Integer, primary_key=True)
-#     planets_id = Column(Integer, ForeignKey('planets.id'))
-#     people_id = Column(Integer, ForeignKey('people.id'))
-#     user_id = Column(Integer, ForeignKey('user.id'))
-#   
-# 
+class Favorites(db.Model):
+    id = Column(Integer, primary_key=True)
+    planets_id = Column(Integer, foreignKey('planets.id'))
+    people_id = Column(Integer, foreignKey('people.id'))
+    user_id = Column(Integer, foreignKey('user.id'))
+   
+    def __repr__(self):
+       return '<Favorites %r>' % self.id
+
