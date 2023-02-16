@@ -120,28 +120,35 @@ def get_favorites(user_id):
         for favorites in favorites:
             result.append(favorites.serialize())
         return jsonify(result)
-   
 
-@app.route('/people/<int:people_id>', methods=['DELETE'])
-def delete_person(people_id):
-    person1=User.query.get(people_id)
-    if person1 is None:
-        raise APIException("User not found",status_code=404)
-    db.session.delete_person(people_id)
-    db.session.commit()
-    return jsonify(), 200
-    return "Invalid Method", 404
+@app.route('/user/<int:user_id>/favorite/<string:tipo>/<int:id>', methods=['POST'])
+def postfavorite(user_id,tipo,planet_id):
+        body= request.get_json()
+        favorites= Favorites(
+            user_id=user_id,
+            table=tipo,
+            table_id=id
+        )
+        db.session.add(favorites)
+        db.session.commit()
+        response_body={
+        "msg": " Favorite added correctly!"
+        }
+        return jsonify(response_body)
 
-@app.route('/planets/<int:planets_id>', methods=['DELETE'])
-def delete_planets(planets_id):
-    person1=User.query.get(planets_id)
-    if person1 is None:
-        raise APIException("User not found",status_code=404)
-    db.session.delete_planets(planets_id)
+@app.route('/user/<int:user_id>/favorite/<string:tipo>/<int:id>', methods=['DELETE'])
+def deletefavorite(user_id,tipo,id):
+    favorite = Favorites.query.filter_by(
+        user_id=user_id,
+        table=tipo,
+        table_id=id
+    ).first()
+    if favorite is None:
+        return 'Favorito no encontrado', 404
+    db.session.delete(favorite)
     db.session.commit()
-    return jsonify(), 200
-    return "Invalid Method", 404
-   
+    return jsonify('Favorito borrado'),200
+            
     
     
 # this only runs if `$ python src/app.py` is executed
